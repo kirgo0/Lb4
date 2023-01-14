@@ -31,7 +31,7 @@ new Question("question5?",["answer1","answer2","answer3","answer4","answer56"],3
 new Question("question6?",["answer1","answer2","answer3","answer4"],3,"default"),
 new Question("question7?",["answer1","answer2","answer3","answer4"],3,"default"),
 new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default"),
-new Question("question9?",["answer1","answer2","answer3","answer4"],3,"default"),
+new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
 new Question("question10?",["answer1","answer2","answer3","answer4"],3,"checkBox")];
 const countOfQuestions = questions.length;
 
@@ -50,7 +50,7 @@ function GenerateQuestion(q) {
 
     if(q.type === "default") {
         GenerateSimpleQuestion(q);
-    } else if(q.type === "checkBox") {
+    } else {
         GenerateCheckBoxQuestion(q);
     }
     
@@ -114,6 +114,64 @@ function GenerateSimpleQuestion(q) {
     }
 }
 
+function GenerateCheckBoxQuestion(q) {
+    const questionBlock = document.createElement("div");
+    questionBlock.classList.add("question-block");
+    parent.appendChild(questionBlock);
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("wrapper");
+    questionBlock.appendChild(wrapper);
+    
+    const qText = document.createElement("div");
+    wrapper.classList.add("question-text");
+    wrapper.appendChild(qText);
+
+    const qTextLabel = document.createElement("label");
+    qTextLabel.textContent = q.text;
+    qText.classList.add("question-text");
+    qText.appendChild(qTextLabel);
+
+    const answers = document.createElement("div");
+    answers.classList.add("checkbox-answers");
+    wrapper.appendChild(answers);
+
+    for(let i = 0; i < q.answers.length; i++) {
+        var answerDiv = document.createElement("div");
+        answerDiv.classList.add("checkbox-answer");
+        answers.appendChild(answerDiv);
+
+        var answer = document.createElement("input");
+        answer.setAttribute("type","button");
+        answer.setAttribute("id","checkBox" + i);
+        answer.classList.add("checkbox-input");
+        answerDiv.appendChild(answer);
+
+        var inputLabel = document.createElement("label");
+        inputLabel.textContent = q.answers[i];
+        inputLabel.setAttribute("for","checkBox" + i);
+        answerDiv.appendChild(inputLabel);
+    
+        answer.onclick = function() {
+            SelectCheckBoxAnswer(i);
+        }
+    }
+
+    // if(q.selectedAnswer > -1) {
+    //     btns = document.querySelectorAll(".button-input");
+    //     var k = q.selectedAnswer;
+    //     for(let i = 0; i < btns.length; i++) {
+    //         if(i != k) {
+    //             btns[i].classList.add("button-input-disabled");
+    //         } else {
+    //             questions[currentQuestion].selectedAnswer = k;
+    //             btns[i].classList.remove("button-input-disabled");
+    //         }
+    //         console.log(i);
+    //     }
+    // }
+}
+
 function PrevQuestion() {
     currentQuestion--;    
     GenerateQuestion(questions[currentQuestion]);   
@@ -147,8 +205,26 @@ function SelectAnswer(k) {
     }
 }
 
-function GenerateCheckBoxQuestion(q) {
-    
+function SelectCheckBoxAnswer(k) {
+    btns = document.querySelectorAll(".checkbox-input");
+    if(questions[currentQuestion].selectedAnswer.indexOf(k) != -1) {
+        for(let j = 0; j < btns.length; j++) {
+            btns[j].classList.remove("checkbox-input-selected");
+        }
+        questions[currentQuestion].selectedAnswer.remove(k);
+        return;
+    }
+    for(let i = 0; i < btns.length; i++) {
+        if(questions[currentQuestion].selectedAnswer.indexOf(i) == -1) {
+            btns[i].classList.add("checkbox-input-selected");
+        } else {
+            questions[currentQuestion].selectedAnswer.add(k);
+            localStorage.setItem('questions',questions);
+            btns[i].classList.remove("checkbox-input-selected");
+        }
+        console.log(i);
+    }
 }
 
-// GenerateQuestion(questions[currentQuestion]);
+
+GenerateQuestion(questions[currentQuestion]);

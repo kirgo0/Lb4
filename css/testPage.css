@@ -95,12 +95,23 @@ body {
 .checkbox-answers {
     display: flex;
     flex-direction: column;
+    gap: 2vh;
 }
 
 .checkbox-input {
     width: 5vw;
     height: 5vw;
+    border: none;
+    background-color: #424242;
+    transition: background-color 0.3s ease;
+}
 
+.checkbox-input:hover {
+    background-color: #48dbfb;
+}
+
+.checkbox-input-selected {
+    background-color: #48dbfb;
 }
 
 .checkbox-answer {
