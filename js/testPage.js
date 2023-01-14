@@ -6,7 +6,7 @@ class Question {
     text;
     answers;
     correctAnswer;
-    selectedAnswer = -1;
+    selectedAnswer;
     type;
 
     constructor(text, answers,correctAnswer,type) {
@@ -14,6 +14,8 @@ class Question {
         this.answers = answers;
         this.correctAnswer = correctAnswer;
         this.type = type;
+        if(type === "default") this.selectedAnswer = -1;
+        else this.selectedAnswer = [];
     }
 
     SelectAnswer(k) {
@@ -32,7 +34,9 @@ new Question("question6?",["answer1","answer2","answer3","answer4"],3,"default")
 new Question("question7?",["answer1","answer2","answer3","answer4"],3,"default"),
 new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default"),
 new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
-new Question("question10?",["answer1","answer2","answer3","answer4"],3,"checkBox")];
+new Question("question10?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
+new Question(".container {\n display: &cell% flex-direction: &cell%  justify-content: &cell% align-items: &cell% }",
+["flex;","column;","center;","flex-end;"],[1,2,3,4]),"dragAndDrop"];
 const countOfQuestions = questions.length;
 
 function GenerateQuestion(q) {
@@ -50,8 +54,10 @@ function GenerateQuestion(q) {
 
     if(q.type === "default") {
         GenerateSimpleQuestion(q);
-    } else {
+    } else if(q.type === "checkBox") {
         GenerateCheckBoxQuestion(q);
+    } else if(q.type === "dragAndDrop") {
+        GenrateDragNDropQuestion(q);
     }
     
     if(currentQuestion != 9) {
@@ -88,30 +94,29 @@ function GenerateSimpleQuestion(q) {
     answers.classList.add("question-answers");
     wrapper.appendChild(answers);
 
+    var answersArr = [];
+
     for(let i = 0; i < q.answers.length; i++) {
         var answer = document.createElement("input");
         answer.setAttribute("type","button");
         answer.classList.add("button-input");
+        answer.classList.add("button-input-disabled");
+        if(q.selectedAnswer > -1) {
+            if(i == q.selectedAnswer) {
+                answer.classList.remove("button-input-disabled");
+            }
+        }
         answer.value = q.answers[i];
         answer.onclick = function() {
             SelectAnswer(i);
         }
-        answers.appendChild(answer);
+        answersArr.push(answer);
     }
 
-    if(q.selectedAnswer > -1) {
-        btns = document.querySelectorAll(".button-input");
-        var k = q.selectedAnswer;
-        for(let i = 0; i < btns.length; i++) {
-            if(i != k) {
-                btns[i].classList.add("button-input-disabled");
-            } else {
-                questions[currentQuestion].selectedAnswer = k;
-                btns[i].classList.remove("button-input-disabled");
-            }
-            console.log(i);
-        }
+    for(let i = answersArr.length-1; i >= 0; i--) {
+        answers.appendChild(answersArr[i]);
     }
+
 }
 
 function GenerateCheckBoxQuestion(q) {
@@ -136,40 +141,150 @@ function GenerateCheckBoxQuestion(q) {
     answers.classList.add("checkbox-answers");
     wrapper.appendChild(answers);
 
+    var answersArr = [];
     for(let i = 0; i < q.answers.length; i++) {
         var answerDiv = document.createElement("div");
         answerDiv.classList.add("checkbox-answer");
-        answers.appendChild(answerDiv);
 
         var answer = document.createElement("input");
         answer.setAttribute("type","button");
         answer.setAttribute("id","checkBox" + i);
         answer.classList.add("checkbox-input");
-        answerDiv.appendChild(answer);
-
-        var inputLabel = document.createElement("label");
-        inputLabel.textContent = q.answers[i];
-        inputLabel.setAttribute("for","checkBox" + i);
-        answerDiv.appendChild(inputLabel);
-    
+        if(questions[currentQuestion].selectedAnswer.indexOf(i) != -1) {
+            answer.classList.add("checkbox-input-selected");
+        }
+        
         answer.onclick = function() {
             SelectCheckBoxAnswer(i);
         }
+        answerDiv.appendChild(answer);
+        var inputLabel = document.createElement("label");
+        inputLabel.textContent = q.answers[i];
+        
+        inputLabel.setAttribute("for","checkBox" + i);
+        inputLabel.classList.add("checkBox-Label");
+        answerDiv.appendChild(inputLabel); 
+        
+        answersArr.push(answerDiv);
     }
 
-    // if(q.selectedAnswer > -1) {
-    //     btns = document.querySelectorAll(".button-input");
-    //     var k = q.selectedAnswer;
-    //     for(let i = 0; i < btns.length; i++) {
-    //         if(i != k) {
-    //             btns[i].classList.add("button-input-disabled");
-    //         } else {
-    //             questions[currentQuestion].selectedAnswer = k;
-    //             btns[i].classList.remove("button-input-disabled");
-    //         }
-    //         console.log(i);
-    //     }
+    // for(let i = 0; i < answersArr.length; i++) {
+    //     answers.appendChild(answersArr[i]);
     // }
+
+    for(let i = answersArr.length-1; i >= 0; i--) {
+        answers.appendChild(answersArr[i]);
+    }
+
+}
+
+var card;
+
+const dragStart = function () {
+    setTimeout(() => {
+        this.classList.add('cell-hide');
+        card = this;
+    }, 500);
+};
+
+const dragEnd = function () {
+    this.classList.remove('cell-hide');
+};
+
+const dragOver = function (evt) {
+    evt.preventDefault();
+};
+
+const dragEnter = function (evt) {
+    evt.preventDefault();
+    this.classList.add('hovered');
+};
+
+const dragLeave = function () {
+    this.classList.remove('hovered');
+};
+
+const dragDrop = function () {
+    this.append(card);
+    this.classList.remove('hovered');
+};
+
+
+function GenrateDragNDropQuestion(q) {
+    const questionBlock = document.createElement("div");
+    questionBlock.classList.add("question-block");
+    parent.appendChild(questionBlock);
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("wrapper");
+    questionBlock.appendChild(wrapper);
+
+    const dragNdropQ = document.createElement("div");
+    dragNdropQ.classList.add("dragndrop-question");
+    wrapper.appendChild(dragNdropQ);
+
+    var questionText = q.text.split("&cell%");
+    console.log(questionText);  
+
+    // generation question text and cells, cell in question marks as &cell%
+    for(let i = 0; i < questionText.length; i++) {
+        var text = questionText[i];
+        var lastTextDiv;
+        if(i === questionText.length-1) {
+            const qRow = document.createElement("div");
+            qRow.classList.add("dragndrop-question-text");
+            dragNdropQ.appendChild(qRow);
+            qRow.textContent = text;
+        } else {
+            if(text.includes("\n")) {
+                var rows = text.split("\n");
+                rows.forEach(row => {
+                    const qRow = document.createElement("div");
+                    qRow.classList.add("dragndrop-question-text");
+                    qRow.textContent = row;
+                    dragNdropQ.appendChild(qRow);
+                    lastTextDiv = qRow;
+                })
+                const qCell = document.createElement("div");
+                qCell.classList.add("answer-cell");
+                lastTextDiv.appendChild(qCell);
+            } else {
+                const qRow = document.createElement("div");
+                qRow.classList.add("dragndrop-question-text");
+                dragNdropQ.appendChild(qRow);
+                qRow.textContent = text;
+                const qCell = document.createElement("div");
+                qCell.classList.add("answer-cell");
+                qRow.appendChild(qCell);
+            }
+        }
+    }
+
+    const dragNdropA = document.createElement("div");
+    dragNdropA.classList.add("dragndrop-answers");
+    wrapper.appendChild(dragNdropA);
+
+    for(let i = 0; i < q.answers.length; i++) {
+        var answer = document.createElement("input");
+        answer.classList.add("dragndrop-answer");
+        answer.setAttribute("draggable","true");
+        answer.setAttribute("type","button");
+        answer.value = q.answers[i];
+        answer.addEventListener('dragstart', dragStart);
+        answer.addEventListener('dragend', dragEnd);
+        answer.onclick = function () {
+            SelectDragNDropAnswer(i,answer);
+        }
+        dragNdropA.appendChild(answer);
+    }
+
+    var cells = document.querySelectorAll(".answer-cell");
+    cells.forEach(qCell => {
+        qCell.addEventListener('dragover', dragOver);
+        qCell.addEventListener('dragenter', dragEnter);
+        qCell.addEventListener('dragleave', dragLeave);
+        qCell.addEventListener('drop', dragDrop);
+    });
 }
 
 function PrevQuestion() {
@@ -186,45 +301,74 @@ function NextQuestion() {
 
 function SelectAnswer(k) {
     btns = document.querySelectorAll(".button-input");
-    if(questions[currentQuestion].selectedAnswer == k) {
-        for(let j = 0; j < btns.length; j++) {
-            btns[j].classList.remove("button-input-disabled");
+    const answer = questions[currentQuestion].selectedAnswer;
+    if(answer != k) {
+        for(let i = 0; i < btns.length; i++) {
+            var btn = btns[i];
+            if(questions[currentQuestion].answers[k] == btn.value) {
+                btn.classList.remove("button-input-disabled");
+            } else {
+                btn.classList.add("button-input-disabled");
+            }
         }
-        questions[currentQuestion].selectedAnswer = -1;
+        questions[currentQuestion].selectedAnswer = k;
         return;
-    }
+    } 
+    questions[currentQuestion].selectedAnswer = -1;
     for(let i = 0; i < btns.length; i++) {
-        if(i != k) {
-            btns[i].classList.add("button-input-disabled");
-        } else {
-            questions[currentQuestion].selectedAnswer = k;
-            localStorage.setItem('questions',questions);
-            btns[i].classList.remove("button-input-disabled");
-        }
-        console.log(i);
+        btns[i].classList.add("button-input-disabled");
     }
+
+    // if(answer == k) {
+    //     for(let j = 0; j < btns.length; j++) {
+    //         btns[j].classList.remove("button-input-disabled");
+    //     }
+    //     answer = -1;
+    //     return;
+    // }
+    // for(let i = 0; i < btns.length; i++) {
+    //     if(i != k) {
+    //         btns[i].classList.add("button-input-disabled");
+    //     } else {
+    //         answer = k;
+    //         localStorage.setItem('questions',questions);
+    //         btns[i].classList.remove("button-input-disabled");
+    //     }
+    //     console.log(i);
+    // }
 }
 
 function SelectCheckBoxAnswer(k) {
     btns = document.querySelectorAll(".checkbox-input");
-    if(questions[currentQuestion].selectedAnswer.indexOf(k) != -1) {
-        for(let j = 0; j < btns.length; j++) {
-            btns[j].classList.remove("checkbox-input-selected");
+    const answersArr = questions[currentQuestion].selectedAnswer;
+    if(answersArr.indexOf(k) == -1) {
+        answersArr.push(k);
+        var labels = document.querySelectorAll(".checkBox-Label");
+        for(let i = 0; i < labels.length; i++) {
+            var label = labels[i];
+            console.log(label.textContent);
+            if(questions[currentQuestion].answers[k] == label.textContent) {
+                console.log(answersArr[k] + " - " + label.textContent);
+                btns[i].classList.add("checkbox-input-selected");
+            }
         }
-        questions[currentQuestion].selectedAnswer.remove(k);
-        return;
-    }
-    for(let i = 0; i < btns.length; i++) {
-        if(questions[currentQuestion].selectedAnswer.indexOf(i) == -1) {
-            btns[i].classList.add("checkbox-input-selected");
-        } else {
-            questions[currentQuestion].selectedAnswer.add(k);
-            localStorage.setItem('questions',questions);
-            btns[i].classList.remove("checkbox-input-selected");
+    } else {
+        answersArr.splice(
+            answersArr.indexOf(k),1);
+        var labels = document.querySelectorAll(".checkBox-Label");
+        for(let i = 0; i < labels.length; i++) {
+            var label = labels[i];
+            console.log(label.textContent);
+            if(questions[currentQuestion].answers[k] == label.textContent) {
+                console.log(answersArr[k] + " - " + label.textContent);
+                btns[i].classList.remove("checkbox-input-selected");
+            }
         }
-        console.log(i);
     }
 }
 
+function SelectDragNDropAnswer(k,card) {
+}
 
-GenerateQuestion(questions[currentQuestion]);
+GenrateDragNDropQuestion(questions[10]);
+// GenerateQuestion(questions[currentQuestion]);

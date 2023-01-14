@@ -104,6 +104,7 @@ body {
     border: none;
     background-color: #424242;
     transition: background-color 0.3s ease;
+    border-radius: 5px;
 }
 
 .checkbox-input:hover {
@@ -112,6 +113,10 @@ body {
 
 .checkbox-input-selected {
     background-color: #48dbfb;
+}
+
+.checkbox-input-selected:hover {
+    background-color: #424242;
 }
 
 .checkbox-answer {
@@ -123,4 +128,57 @@ body {
 .checkbox-answer label {
     font-family: 'Roboto Mono', monospace;
     font-size: 2vw;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-end;  
+}
+
+.dragndrop-question {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2vw;
+    flex-direction: column;
+    display: flex;
+    gap: 0.4vh;
+}
+
+.dragndrop-question-text{
+    display: flex;
+    align-items: center;
+}
+
+.answer-cell {
+    display: inline;
+}
+
+.answer-cell {
+    height: 50px;
+    width: 200px;
+    border: 2px solid #424242;
+    border-radius: 2px;
+}
+
+.dragndrop-answers {
+    display: flex;
+    justify-content: space-between;
+    gap: 3vw;
+}
+
+.dragndrop-answer {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2vw;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 50px;
+    width: 200px;
+    background-color: #feca57;
+    border-radius: 2px;
+}
+
+.cell-hide {
+    display: none;
 }
