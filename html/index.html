@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../css/style.css">
+   <script defer src="../js/loginform.js"></script>
+   <title>Main</title>
+   <style> @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&family=Rubik+Mono+One&display=swap'); </style>
+</head>
+<body>
+   <header>
+      <div class="header-content">
+         <div class="logo">
+            <div class="logo-text">
+               WEB
+            </div>
+            <div class="logo-line logo-line-first"></div>
+         </div>
+         <div class="logo logo-second">
+            <div class="logo-text">
+               Quiz
+            </div>
+            <div class="logo-line logo-line-second"></div>
+         </div>
+         <div class="author">designed and developed by Golets Kyrylo <p> TR-11</div>
+      </div>
+      <div class="header-bg">
+         <div class="bg-triangle"> </div> 
+         <div class="bg-triangle2"> </div>   
+      </div>
+   </header>
+   <section class="login-block">
+      <div class="wrapper">
+         <div class="block-half left-half">
+            <div class="block-text left-text">
+               Try to test your knowledge of HTML CSS and JS
+            </div>
+         </div>
+         <div class="block-half right-half">
+            <div class="block-text right-text">
+               To start the test, enter your personal data
+            </div>
+            <form action="" class="login-form">
+               <input type="text" id="name" pattern="[A-z]*" placeholder="Name">
+               <input type="text" id="surname" pattern="[A-z]*" placeholder="Surname">
+               <input type="text" id="group" placeholder="Group">
+               <input class="formSubmit" type="submit" id="submitBTN" value="Start test" disabled onsubmit="startTest()">
+            </form>
+         </div>
+      </div>
+   </section>
+   <div class="bubbles">
+      <!-- span[style="--i:$"]*30 -->
+   </div>
+</body>
+</html>

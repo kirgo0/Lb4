@@ -1,0 +1,115 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    outline: none;
+}
+
+body {
+    background-color: #424242;
+}
+
+.question-area {
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.question-block {
+    background-color: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    animation: testBlock 1s ease;
+}
+
+@keyframes testBlock {
+    0% {
+        transform: translateY(3vh);
+    }
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+.wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 6vh;
+}
+
+.question-text {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2vw;
+    width: 45vw;
+    max-width: 70vw;
+}
+
+.question-answers {
+    display: flex;
+    justify-content: space-between;
+}
+
+.button-input {
+    min-width: 10%;
+    padding: 20px 10px;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.3vw;
+    border: none;
+    border-radius: 2px;
+    box-shadow: 2px 2px 2px #cfcfcf;
+    transition: background-color 0.3s ease;
+}
+
+.button-input-disabled {
+    background-color: #424242 !important;
+}
+
+.button-input:nth-child(1) {
+    background-color: #feca57;
+}
+.button-input:nth-child(2) {
+    background-color: #ff6b6b;
+}
+.button-input:nth-child(3) {
+    background-color: #1dd1a1;
+}
+.button-input:nth-child(4) {
+    background-color: #48dbfb;
+}
+
+.arrow {
+    font-family: 'Roboto Mono', monospace;
+    color: #fff;
+    font-size: 5vw;
+    background: transparent;
+    border: none;
+    transition: transform 0.2s ease;
+}
+
+.arrow:hover {
+    transform: scale(1.1);
+}
+
+.checkbox-answers {
+    display: flex;
+    flex-direction: column;
+}
+
+.checkbox-input {
+    width: 5vw;
+    height: 5vw;
+
+}
+
+.checkbox-answer {
+    display: flex;
+    align-items: center;
+    gap: 2vw;
+}
+
+.checkbox-answer label {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 2vw;
+}
