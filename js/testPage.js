@@ -12,8 +12,8 @@ class Question {
     constructor(text, answers,correctAnswer,type) {
         this.text = text;
         this.answers = answers;
-        this.correctAnswer = correctAnswer;
         this.type = type;
+        this.correctAnswer = correctAnswer;
         if(type === "default") this.selectedAnswer = -1;
         else this.selectedAnswer = [];
     }
@@ -36,7 +36,11 @@ new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default")
 new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
 new Question("question10?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
 new Question(".container {\n display: &cell% flex-direction: &cell%  justify-content: &cell% align-items: &cell% }",
-["flex;","column;","center;","flex-end;"],[1,2,3,4]),"dragAndDrop"];
+["flex;","column;","center;","flex-end;"],
+["flex;","column;","center;","flex-end;"],"dragAndDrop"),
+new Question("question12?",
+["flex;","column;","center;","flex-end;"],
+2,"dropDown")];
 const countOfQuestions = questions.length;
 
 function GenerateQuestion(q) {
@@ -58,9 +62,11 @@ function GenerateQuestion(q) {
         GenerateCheckBoxQuestion(q);
     } else if(q.type === "dragAndDrop") {
         GenrateDragNDropQuestion(q);
+    } else if(q.type === "dropDown") {
+        GenerateDropDownQuestion(q);
     }
     
-    if(currentQuestion != 9) {
+    if(currentQuestion != countOfQuestions-1) {
         const rightArrow = document.createElement("button");
         rightArrow.classList.add("arrow");
         rightArrow.classList.add("right-arrow");
@@ -70,6 +76,7 @@ function GenerateQuestion(q) {
         }
         parent.appendChild(rightArrow);
     }
+    console.log(questions)
 }
 
 function GenerateSimpleQuestion(q) {
@@ -184,11 +191,12 @@ const dragStart = function () {
     setTimeout(() => {
         this.classList.add('cell-hide');
         card = this;
-    }, 500);
+    }, 0);
 };
 
 const dragEnd = function () {
     this.classList.remove('cell-hide');
+    card = null;
 };
 
 const dragOver = function (evt) {
@@ -203,12 +211,6 @@ const dragEnter = function (evt) {
 const dragLeave = function () {
     this.classList.remove('hovered');
 };
-
-const dragDrop = function () {
-    this.append(card);
-    this.classList.remove('hovered');
-};
-
 
 function GenrateDragNDropQuestion(q) {
     const questionBlock = document.createElement("div");
@@ -247,6 +249,7 @@ function GenrateDragNDropQuestion(q) {
                 })
                 const qCell = document.createElement("div");
                 qCell.classList.add("answer-cell");
+                qCell.classList.add("question-cell");
                 lastTextDiv.appendChild(qCell);
             } else {
                 const qRow = document.createElement("div");
@@ -255,6 +258,7 @@ function GenrateDragNDropQuestion(q) {
                 qRow.textContent = text;
                 const qCell = document.createElement("div");
                 qCell.classList.add("answer-cell");
+                qCell.classList.add("question-cell");
                 qRow.appendChild(qCell);
             }
         }
@@ -265,6 +269,14 @@ function GenrateDragNDropQuestion(q) {
     wrapper.appendChild(dragNdropA);
 
     for(let i = 0; i < q.answers.length; i++) {
+        const qCell = document.createElement("div");
+        qCell.classList.add("answer-cell");
+        dragNdropA.appendChild(qCell);
+    }
+
+    var qCells = document.querySelectorAll(".question-cell");
+    var aCells = dragNdropA.querySelectorAll(".answer-cell");
+    for(let i = 0; i < q.answers.length; i++) {
         var answer = document.createElement("input");
         answer.classList.add("dragndrop-answer");
         answer.setAttribute("draggable","true");
@@ -272,19 +284,45 @@ function GenrateDragNDropQuestion(q) {
         answer.value = q.answers[i];
         answer.addEventListener('dragstart', dragStart);
         answer.addEventListener('dragend', dragEnd);
-        answer.onclick = function () {
-            SelectDragNDropAnswer(i,answer);
+        if(q.selectedAnswer.includes(answer.value)) {
+            console.log(q.selectedAnswer.indexOf(answer.value))
+            qCells[q.selectedAnswer.indexOf(answer.value)].append(answer);
+        } else {
+            aCells[i].appendChild(answer);
         }
-        dragNdropA.appendChild(answer);
+        // answer.onclick = function () {
+        //     SelectDragNDropAnswer(i,answer);
+        // }
     }
 
     var cells = document.querySelectorAll(".answer-cell");
-    cells.forEach(qCell => {
-        qCell.addEventListener('dragover', dragOver);
-        qCell.addEventListener('dragenter', dragEnter);
-        qCell.addEventListener('dragleave', dragLeave);
-        qCell.addEventListener('drop', dragDrop);
+    cells.forEach(cell => {
+        cell.addEventListener('dragover', dragOver);
+        cell.addEventListener('dragenter', dragEnter);
+        cell.addEventListener('dragleave', dragLeave);
+        cell.addEventListener('drop', () => {
+            if(cell.firstChild) {
+                var card2 = cell.firstChild;
+                card.parentNode.append(card2);
+                card.parentNode.classList.remove('hovered');
+            }
+            cell.append(card);
+            cell.classList.remove('hovered');
+            var qCells = document.querySelectorAll(".question-cell");
+            var savedAnswers = [];
+            for(let i = 0; i < qCells.length; i++) {
+                if(qCells[i].firstChild) {
+                    savedAnswers[i] = qCells[i].firstChild.value;
+                }
+            }
+            q.selectedAnswer = savedAnswers;
+            console.log("saved: " + q.selectedAnswer);
+        });
     });
+}
+
+function GenerateDropDownQuestion(q) {
+    
 }
 
 function PrevQuestion() {
@@ -367,8 +405,5 @@ function SelectCheckBoxAnswer(k) {
     }
 }
 
-function SelectDragNDropAnswer(k,card) {
-}
-
-GenrateDragNDropQuestion(questions[10]);
+// GenrateDragNDropQuestion(questions[10]);
 // GenerateQuestion(questions[currentQuestion]);

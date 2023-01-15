@@ -155,6 +155,7 @@ body {
 }
 
 .answer-cell {
+    display: flex;
     height: 50px;
     width: 200px;
     border: 2px solid #424242;
@@ -171,14 +172,30 @@ body {
     font-family: 'Roboto Mono', monospace;
     font-size: 1.2vw;
     display: flex;
+    height: 100%;
     justify-content: center;
     align-items: center;
-    height: 50px;
-    width: 200px;
+    flex-grow: 1;
     background-color: #feca57;
     border-radius: 2px;
+    border: none;
 }
 
 .cell-hide {
     display: none;
+}
+
+.dropdown-question {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.2vw;
+    flex-direction: column;
+}
+
+.dropdown-select-menu {
+    width: 200px;
+}
+
+.dropdown-answers {
+    display: flex;
+    flex-direction: column;
 }
