@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <meta http-equiv="X-UA-Compatible" content="IE=edge">
+   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <link rel="stylesheet" href="../css/resultPage.css">
+   <link rel="stylesheet" href="../css/bubbles.css">
+   <script defer src="../js/resultPage.js"></script>
+   <script defer src="../js/bubbles.js"></script>
+   <style> @import url('https://fonts.googleapis.com/css2?family=Roboto+Mono:wght@300;400;500&family=Rubik+Mono+One&display=swap'); </style>
+   <title>View your test result!</title>
+</head>
+<body>
+   <header>
+      <div class="header-wrapper">
+         <div class="logo">Web Quiz</div>
+         <div class="menu">
+            <a href="./index.html" class="home">Home</a>
+            <a href="#theory.html" class="theory">Read Theory</a>
+         </div>
+      </div>   
+   </header>
+   <section class="main">
+      <div class="wrapper">
+         <div class="user-info">
+            <div class="user-surname">Surname</div>
+            <div class="user-name">Name</div>
+            <div class="user-group">Group</div>
+         </div>
+         <div class="test-info">
+            <div class="test-info-text">Last try:</div>
+            <div class="last-result pie" style="--p:20">0.0</div>
+            <div class="count-of-tries">0</div>
+         </div>
+         <div class="tryagain-button-block">
+            <input type="button" class="tryagain-button" value="Try again">
+         </div>
+      </div>
+   </section>
+   <div class="bubbles">
+      <!-- span[style="--i:$"]*30 -->
+   </div>
+</body>
+</html>

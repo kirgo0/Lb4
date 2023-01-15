@@ -1,0 +1,148 @@
+* {
+   margin: 0;
+   padding: 0;
+   box-sizing: border-box;
+   outline: none;
+}
+
+a {
+   text-decoration: none;
+}
+
+body {
+   background-color: #424242;
+}
+
+header {
+   width: 100vw;
+   height: 15vh;
+   background-color: #fff;
+}
+
+.header-wrapper {
+   display: flex;
+   padding: 4vh 5vw;
+   justify-content: space-between;
+}
+
+.menu {
+   display: flex;
+   align-items: center;
+   gap: 3vw;
+   justify-content: end;
+   width: 50%;
+}
+
+.menu a {
+   font-family: 'Roboto Mono', monospace;
+   color: #424242;
+   transition: border 0.1s ease;
+}
+
+.menu a:hover {
+   border-bottom: 2px solid #424242;
+}
+
+.logo {
+   font-family: 'Rubik Mono One', sans-serif;
+   font-size: 3vw;
+}
+
+.main {
+   display: flex;  
+   justify-content: center;
+   align-items: center;
+   height: 85vh;
+}
+
+.wrapper {
+   background-color: #fff;
+   padding: 4vh 5vw;
+   display: flex;
+   flex-direction: column;
+   border-radius: 5px;
+   gap: 4vh;
+}
+
+.user-info {
+   font-family: 'Roboto Mono', monospace;
+   font-size: 2vw;
+   display: flex;
+   gap: 4vw;
+}
+
+.test-info {
+   font-family: 'Roboto Mono', monospace;
+   display: flex;
+   flex-direction: column;
+   gap: 3vh;
+   align-items: center;
+}
+
+.tryagain-button-block {
+   display: flex;
+   justify-content: center;
+}
+
+.tryagain-button {
+   font-family: 'Roboto Mono', monospace;
+   font-size: 1.5vw;
+   padding: 20px;
+   background-color: #48dbfb;
+   border: none;
+   border-radius: 5px;
+}
+
+@property --p{
+   syntax: '<number>';
+   inherits: true;
+   initial-value: 1;
+ }
+ 
+ .pie {
+   --p:20;
+   --b:22px;
+   --c:#48dbfb;
+   --w:150px;
+ 
+   width: var(--w);
+   aspect-ratio: 1;
+   position: relative;
+   display: inline-grid;
+   margin: 5px;
+   place-content: center;
+   font-size: 25px;
+   font-weight: bold;
+   font-family: sans-serif;
+ }
+ .pie:before,
+ .pie:after {
+   content: "";
+   position: absolute;
+   border-radius: 50%;
+ }
+ .pie:before {
+   inset: 0;
+   background:
+     radial-gradient(farthest-side,var(--c) 98%,#0000) top/var(--b) var(--b) no-repeat,
+     conic-gradient(var(--c) calc(var(--p)*1%),#0000 0);
+   -webkit-mask: radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+           mask: radial-gradient(farthest-side,#0000 calc(99% - var(--b)),#000 calc(100% - var(--b)));
+ }
+ .pie:after {
+   inset: calc(50% - var(--b)/2);
+   background: var(--c);
+   transform: rotate(calc(var(--p)*3.6deg)) translateY(calc(50% - var(--w)/2));
+ }
+ .animate {
+   animation: p 1s .5s both;
+ }
+ .no-round:before {
+   background-size: 0 0, auto;
+ }
+ .no-round:after {
+   content: none;
+ }
+ @keyframes p{
+   from{--p:0}
+ }
