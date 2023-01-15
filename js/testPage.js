@@ -15,6 +15,7 @@ class Question {
         this.type = type;
         this.correctAnswer = correctAnswer;
         if(type === "default") this.selectedAnswer = -1;
+        else if(type === "dropDown") this.selectedAnswer = answers[0];
         else this.selectedAnswer = [];
     }
 
@@ -38,8 +39,8 @@ new Question("question10?",["answer1","answer2","answer3","answer4"],3,"checkBox
 new Question(".container {\n display: &cell% flex-direction: &cell%  justify-content: &cell% align-items: &cell% }",
 ["flex;","column;","center;","flex-end;"],
 ["flex;","column;","center;","flex-end;"],"dragAndDrop"),
-new Question("question12?",
-["flex;","column;","center;","flex-end;"],
+new Question("questioasdajshdkajshdlkjashdlkjashdn12?",
+["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhdasdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
 2,"dropDown")];
 const countOfQuestions = questions.length;
 
@@ -322,7 +323,74 @@ function GenrateDragNDropQuestion(q) {
 }
 
 function GenerateDropDownQuestion(q) {
+    const questionBlock = document.createElement("div");
+    questionBlock.classList.add("question-block");
+    parent.appendChild(questionBlock);
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("wrapper");
+    questionBlock.appendChild(wrapper);
+
+    const dropdownQ = document.createElement("div");
+    dropdownQ.classList.add("dropdown-question");
+    dropdownQ.textContent = q.text;
+    wrapper.appendChild(dropdownQ);
     
+    const dropdownM = document.createElement("div");
+    dropdownM.classList.add("dropdown-select-menu");
+    wrapper.appendChild(dropdownM);
+    
+    const dropdownS = document.createElement("div");
+    dropdownS.classList.add("dropdown-selected");
+    dropdownM.appendChild(dropdownS);
+
+    const selectedAnswer = document.createElement("input");
+    selectedAnswer.classList.add("dropdown-answer");
+    selectedAnswer.classList.add("dropdown-answer-selected");
+    selectedAnswer.setAttribute("type","button");
+    selectedAnswer.value = q.selectedAnswer;
+    dropdownS.appendChild(selectedAnswer);
+
+    const dropdownA = document.createElement("div");
+    dropdownA.classList.add("dropdown-answers");
+    dropdownA.classList.add("dropdown-hide");
+    dropdownM.appendChild(dropdownA);
+
+    q.answers.forEach(qAnswer => {
+        if(qAnswer != selectedAnswer.value) {
+            const answer = document.createElement("input");
+            answer.classList.add("dropdown-answer");
+            answer.setAttribute("type","button");
+            answer.value = qAnswer;
+            dropdownA.appendChild(answer);
+        }
+    });
+
+    const dropmenu = document.querySelectorAll(".dropdown-answer");
+    dropmenu.forEach(selectedElem => {
+        selectedElem.onclick = function () {
+            var selectedField = document.querySelector(".dropdown-selected");
+            var unselectedElem = selectedField.firstElementChild;
+            var answersField = document.querySelector(".dropdown-answers");
+            
+            if(selectedElem.classList.contains("dropdown-answer-selected")) {
+                if(answersField.classList.contains("dropdown-hide")) {
+                    answersField.classList.remove("dropdown-hide");
+                } else {
+                    answersField.classList.add("dropdown-hide");
+                }
+            }
+            if(selectedElem != unselectedElem) {
+                selectedElem.classList.add("dropdown-answer-selected");
+                unselectedElem.classList.remove("dropdown-answer-selected");
+                answersField.prepend(unselectedElem);
+                selectedField.append(selectedElem);
+                answersField.classList.add("dropdown-hide");
+                q.selectedAnswer = selectedElem.value;
+            }
+        };
+    });
+
 }
 
 function PrevQuestion() {
@@ -357,23 +425,6 @@ function SelectAnswer(k) {
         btns[i].classList.add("button-input-disabled");
     }
 
-    // if(answer == k) {
-    //     for(let j = 0; j < btns.length; j++) {
-    //         btns[j].classList.remove("button-input-disabled");
-    //     }
-    //     answer = -1;
-    //     return;
-    // }
-    // for(let i = 0; i < btns.length; i++) {
-    //     if(i != k) {
-    //         btns[i].classList.add("button-input-disabled");
-    //     } else {
-    //         answer = k;
-    //         localStorage.setItem('questions',questions);
-    //         btns[i].classList.remove("button-input-disabled");
-    //     }
-    //     console.log(i);
-    // }
 }
 
 function SelectCheckBoxAnswer(k) {
@@ -406,4 +457,5 @@ function SelectCheckBoxAnswer(k) {
 }
 
 // GenrateDragNDropQuestion(questions[10]);
-// GenerateQuestion(questions[currentQuestion]);
+GenerateQuestion(questions[currentQuestion]);
+// GenerateDropDownQuestion();

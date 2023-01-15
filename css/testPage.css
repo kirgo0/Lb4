@@ -192,10 +192,62 @@ body {
 }
 
 .dropdown-select-menu {
-    width: 200px;
+    flex-grow: 1;
 }
 
+.dropdown-selected,
+/* .dropdown-select-menu, */
+.dropdown-selected-answer,
 .dropdown-answers {
     display: flex;
     flex-direction: column;
+}
+
+.dropdown-answer {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 50px;
+    background-color: #ff6b6b;
+    border: none;
+}
+
+.dropdown-answers>.dropdown-answer:nth-child(2n) {
+    background-color: #5a5a5a;
+}
+
+.dropdown-answers>.dropdown-answer {
+    background-color: #424242;
+    transition: background-color 0.4s ease;
+}
+
+
+.dropdown-answers>.dropdown-answer:hover {
+    background-color: #ff6b6b;
+}
+
+.dropdown-answers {
+    border-top: 2px solid #fff;
+    z-index: 0;
+    animation: dropdown 1s ease;
+}
+
+
+.dropdown-answer-selected {
+    z-index: 1;
+}
+
+@keyframes dropdown {
+    0% {
+        transform: translateY(-50px);
+        filter: blur(1px);
+    }
+    100% {
+        transform: translateY(0px);
+        filter: blur(0px);
+    }
+}
+
+.dropdown-hide {
+    display: none;
 }
