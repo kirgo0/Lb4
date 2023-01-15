@@ -23,28 +23,65 @@ class Question {
         this.selectedAnswer = k;
     }
     
+    completed() {
+        if(this.selectedAnswer === -1 || this.selectedAnswer.length === 0) return 0;
+        if(this.type == "dragAndDrop") {
+            for(let i = 0; i < this.selectedAnswer.length; i++) {
+                if(this.selectedAnswer[i] == null) return 1;
+                if(this.selectedAnswer.length < this.answers.length) return 1;
+            }
+        }
+        return 2;
+    }
+
+    result() {
+        if(this.type === "default" || this.type === "dropDown") {
+            if(this.answers[this.correctAnswer] == this.answers[this.selectedAnswer]) {
+                return 1;
+            } else return 0;
+        } else if(this.type === "checkBox") {
+            var res = 0;
+            this.selectedAnswer.forEach(answerID => {
+                if(this.correctAnswer.indexOf(answerID) > -1) res += 1/this.correctAnswer.length;
+                else res -= 1/this.correctAnswer.length;
+            });
+            return res < 0 ? 0 : res; 
+        } else if(this.type === "dragAndDrop") {
+            var res = 0;
+            for (let i = 0; i < this.correctAnswer.length; i++) {
+                const answer = this.correctAnswer[i];
+                if(answer === this.selectedAnswer[i]) {
+                    res += 1/this.correctAnswer.length;
+                }
+            }
+            return res;
+        }
+    }
+
 }
 
 const questions = 
 [new Question("question1?",["answer1","answer2","answer3","answer4","answer5"],3,"default"),
-new Question("question2?",["answer2asdasdasd1","answer2","answer23"],3,"default"),
-new Question("question3?",["answer31","answer32"],3,"default"),
-new Question("question4?",["answer1","answer2","answer3","answer4"],3,"default"),
-new Question("question5?",["answer1","answer2","answer3","answer4","answer56"],3,"default"),
-new Question("question6?",["answer1","answer2","answer3","answer4"],3,"default"),
-new Question("question7?",["answer1","answer2","answer3","answer4"],3,"default"),
-new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default"),
-new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
-new Question("question10?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
+// new Question("question2?",["answer2asdasdasd1","answer2","answer23"],3,"default"),
+// new Question("question3?",["answer31","answer32"],3,"default"),
+// new Question("question4?",["answer1","answer2","answer3","answer4"],3,"default"),
+// new Question("question5?",["answer1","answer2","answer3","answer4","answer56"],3,"default"),
+// new Question("question6?",["answer1","answer2","answer3","answer4"],3,"default"),
+// new Question("question7?",["answer1","answer2","answer3","answer4"],3,"default"),
+// new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default"),
+// new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
+new Question("question10?",["answer1","answer2","answer3","answer4"],[0,2,3],"checkBox"),
+new Question("questioasdajshdkajshdlkjashdlkjashdn12?",
+["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhda sdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
+"center;","dropDown"),
 new Question(".container {\n display: &cell% flex-direction: &cell%  justify-content: &cell% align-items: &cell% }",
 ["flex;","column;","center;","flex-end;"],
 ["flex;","column;","center;","flex-end;"],"dragAndDrop"),
-new Question("questioasdajshdkajshdlkjashdlkjashdn12?",
-["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhda sdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
-2,"dropDown")];
+];
+// ];
 const countOfQuestions = questions.length;
 
-function GenerateQuestion(q) {
+function GenerateQuestion() {
     parent.innerHTML = '';
     if(currentQuestion != 0) {
         const leftArrow = document.createElement("button");
@@ -57,17 +94,22 @@ function GenerateQuestion(q) {
         parent.appendChild(leftArrow);
     }
 
-    if(q.type === "default") {
-        GenerateSimpleQuestion(q);
-    } else if(q.type === "checkBox") {
-        GenerateCheckBoxQuestion(q);
-    } else if(q.type === "dragAndDrop") {
-        GenrateDragNDropQuestion(q);
-    } else if(q.type === "dropDown") {
-        GenerateDropDownQuestion(q);
-    }
+    if(currentQuestion == countOfQuestions) {
+        GenerateTestConfirmMenu();
+    } else {
+        q = questions[currentQuestion];
+        if(q.type === "default") {
+            GenerateSimpleQuestion(q);
+        } else if(q.type === "checkBox") {
+            GenerateCheckBoxQuestion(q);
+        } else if(q.type === "dragAndDrop") {
+            GenrateDragNDropQuestion(q);
+        } else if(q.type === "dropDown") {
+            GenerateDropDownQuestion(q);
+        }
+    }    
     
-    if(currentQuestion != countOfQuestions-1) {
+    if(currentQuestion < countOfQuestions) {
         const rightArrow = document.createElement("button");
         rightArrow.classList.add("arrow");
         rightArrow.classList.add("right-arrow");
@@ -77,7 +119,6 @@ function GenerateQuestion(q) {
         }
         parent.appendChild(rightArrow);
     }
-    console.log(questions)
 }
 
 function GenerateSimpleQuestion(q) {
@@ -277,6 +318,7 @@ function GenrateDragNDropQuestion(q) {
 
     var qCells = document.querySelectorAll(".question-cell");
     var aCells = dragNdropA.querySelectorAll(".answer-cell");
+    
     for(let i = 0; i < q.answers.length; i++) {
         var answer = document.createElement("input");
         answer.classList.add("dragndrop-answer");
@@ -291,9 +333,6 @@ function GenrateDragNDropQuestion(q) {
         } else {
             aCells[i].appendChild(answer);
         }
-        // answer.onclick = function () {
-        //     SelectDragNDropAnswer(i,answer);
-        // }
     }
 
     var cells = document.querySelectorAll(".answer-cell");
@@ -397,6 +436,81 @@ function GenerateDropDownQuestion(q) {
     
 }
 
+function GenerateTestConfirmMenu() {
+    var isFinished = true;
+    var completed = 0;
+    var color = "#48dbfb";
+    questions.forEach(question => {
+        switch(question.completed()) {
+            case 0: {
+                isFinished = false;
+                color = "#ff6b6b";
+                break;
+            } 
+            case 1: {
+                console.log("dgargdrop not full comp");
+                color = "#feca57";
+                break
+            }
+            case 2: {
+                completed++;
+                break;
+            }
+        }
+        if(question.completed() == 0) {
+        }
+    });
+    
+    const confirmBlock = document.createElement("div");
+    confirmBlock.classList.add("confrim-test-block");
+    parent.appendChild(confirmBlock);
+
+    
+    const testcounter = document.createElement("div");
+    testcounter.classList.add("test-counter");
+    testcounter.textContent = completed + "/" + countOfQuestions;
+    testcounter.style.backgroundColor = color;
+    confirmBlock.appendChild(testcounter);
+
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("wrapper");
+    confirmBlock.appendChild(wrapper);
+
+    const text = document.createElement("div");
+    text.classList.add("text-content");
+    if(!isFinished) {
+        text.textContent = "You will lose points if you do not choose an answer to all of the questions! You can go back or finish the test.";
+    } else if(color === "#feca57") {
+        text.textContent = "Looks like you forgot to finish the drag n drop test, if you do not select all the answers, you will lose points. You can go back or finish the test.";
+    } else {
+        text.textContent = "If you are sure of your answers, click on the finish button to see the result.";
+    }
+    wrapper.appendChild(text);
+
+
+    const finishButtonBlock = document.createElement("div");
+    finishButtonBlock.classList.add("finish-button-block");
+    wrapper.appendChild(finishButtonBlock);
+
+    const finishButton = document.createElement("input");
+    finishButton.classList.add("finish-button");
+    finishButton.value = "Finish the test";
+    finishButton.setAttribute("type","button");
+    finishButton.style.backgroundColor = color;
+
+    var TestResult = 0;
+    finishButton.onclick = (()=> {
+        questions.forEach(q => {
+            TestResult+=q.result();
+        });
+        localStorage.setItem("last-result",TestResult);
+        window.document.location = './resultsPage.html';
+    });
+    finishButtonBlock.appendChild(finishButton);
+
+    wrapper.appendChild(finishButtonBlock);
+}
+
 function PrevQuestion() {
     currentQuestion--;    
     GenerateQuestion(questions[currentQuestion]);   
@@ -461,5 +575,6 @@ function SelectCheckBoxAnswer(k) {
 }
 
 // GenrateDragNDropQuestion(questions[10]);
-GenerateQuestion(questions[currentQuestion]);
+GenerateQuestion();
 // GenerateDropDownQuestion();
+// GenerateTestConfirmMenu();

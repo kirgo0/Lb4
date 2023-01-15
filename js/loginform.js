@@ -1,32 +1,9 @@
-const startScreenWidth = screen.width;
 const btn = document.querySelector(".formSubmit");
 const FName = document.getElementById("name");
 const FSurname = document.getElementById("surname");
 const FGroup = document.getElementById("group");
 const Fields = [FName,FSurname,FGroup];
 
-function generateBg() {
-   const bg = document.querySelector(".bubbles");
-   var deleted = bg.lastChild;
-   while(deleted) {
-      bg.removeChild(deleted);
-      deleted = bg.lastChild;
-   }
-   var width = screen.width;
-   // alert(width);
-   var bubbleW = 20; 
-   var prevK = 0;
-   for(var i = 0; i < width/(bubbleW*3); i++) {
-      const bubble = document.createElement("span");
-      var k = Math.floor((Math.random()+1)*width/(bubbleW*3));
-      while(Math.abs(k - prevK) < 5) {
-         k = Math.floor((Math.random()+1)*width/(bubbleW*3));
-      }
-      prevK = k;
-      bubble.setAttribute("style","--i:"+ prevK);
-      bg.appendChild(bubble);
-   }
-}
 
 document.addEventListener('input', e => {
    if(checkFormValid()) {
@@ -56,13 +33,13 @@ function checkFormValid() {
 }
 
 function startTest() {
-   Fname.value,
-        url = 'http://path_to_your_html_files/next.html?name=' + encodeURIComponent(b);
-
-    document.location.href = url;
+   localStorage.setItem("user-name",document.getElementById("name").value);
+   localStorage.setItem("user-surname",document.getElementById("surname").value);
+   localStorage.setItem("user-group",document.getElementById("group").value);
+   localStorage.setItem("count-of-tries",1);
+   window.document.location = './testPage.html';
 }
 
-generateBg();
-window.addEventListener('resize',(event) => {
-   generateBg();
-})
+document.querySelector(".formSubmit").onclick = (() => {
+   startTest();
+});
