@@ -157,8 +157,10 @@ body {
 .answer-cell {
     display: flex;
     height: 50px;
-    width: 200px;
-    border: 2px solid #424242;
+    min-width: 200px;
+    /* border: 2px solid #424242; */
+    background-color: #5a5a5a;
+    transition: background-color 0.3s ease-out;
     border-radius: 2px;
 }
 
@@ -185,6 +187,10 @@ body {
     display: none;
 }
 
+.cell-hovered {
+    background-color: #816a38;
+}
+
 .dropdown-question {
     font-family: 'Roboto Mono', monospace;
     font-size: 1.2vw;
@@ -204,10 +210,15 @@ body {
 }
 
 .dropdown-answer {
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1vw;
+    font-weight: bold;
     display: flex;
     justify-content: center;
     align-items: center;
+    min-width: 200px;
     min-height: 50px;
+    max-width: 70vw;
     background-color: #ff6b6b;
     border: none;
 }
@@ -219,6 +230,7 @@ body {
 .dropdown-answers>.dropdown-answer {
     background-color: #424242;
     transition: background-color 0.4s ease;
+    color:#cfcfcf
 }
 
 

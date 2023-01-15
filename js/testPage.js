@@ -40,7 +40,7 @@ new Question(".container {\n display: &cell% flex-direction: &cell%  justify-con
 ["flex;","column;","center;","flex-end;"],
 ["flex;","column;","center;","flex-end;"],"dragAndDrop"),
 new Question("questioasdajshdkajshdlkjashdlkjashdn12?",
-["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhdasdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
+["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhda sdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
 2,"dropDown")];
 const countOfQuestions = questions.length;
 
@@ -206,11 +206,11 @@ const dragOver = function (evt) {
 
 const dragEnter = function (evt) {
     evt.preventDefault();
-    this.classList.add('hovered');
-};
+    this.classList.add('cell-hovered');
+}
 
 const dragLeave = function () {
-    this.classList.remove('hovered');
+    this.classList.remove('cell-hovered');
 };
 
 function GenrateDragNDropQuestion(q) {
@@ -305,10 +305,10 @@ function GenrateDragNDropQuestion(q) {
             if(cell.firstChild) {
                 var card2 = cell.firstChild;
                 card.parentNode.append(card2);
-                card.parentNode.classList.remove('hovered');
+                card.parentNode.classList.remove('cell-hovered');
             }
             cell.append(card);
-            cell.classList.remove('hovered');
+            cell.classList.remove('cell-hovered');
             var qCells = document.querySelectorAll(".question-cell");
             var savedAnswers = [];
             for(let i = 0; i < qCells.length; i++) {
@@ -367,6 +367,7 @@ function GenerateDropDownQuestion(q) {
     });
 
     const dropmenu = document.querySelectorAll(".dropdown-answer");
+    var maxWidth = 200;
     dropmenu.forEach(selectedElem => {
         selectedElem.onclick = function () {
             var selectedField = document.querySelector(".dropdown-selected");
@@ -389,8 +390,11 @@ function GenerateDropDownQuestion(q) {
                 q.selectedAnswer = selectedElem.value;
             }
         };
+        if(selectedElem.getBoundingClientRect().width > maxWidth) {
+            maxWidth = selectedElem.getBoundingClientRect().width;
+        }
     });
-
+    
 }
 
 function PrevQuestion() {
