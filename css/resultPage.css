@@ -14,6 +14,8 @@ body {
 }
 
 header {
+   position: relative;
+   z-index: 1;
    width: 100vw;
    height: 15vh;
    background-color: #fff;
@@ -49,6 +51,8 @@ header {
 }
 
 .main {
+   position: relative;
+   z-index: 1;
    display: flex;  
    justify-content: center;
    align-items: center;

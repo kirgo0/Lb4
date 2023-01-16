@@ -1,6 +1,7 @@
 var btns = document.querySelectorAll(".button-input");
 const parent = document.querySelector(".question-area");
 var currentQuestion = localStorage.getItem('currentQuestion') == null ? 0 : localStorage.getItem('currentQuestion');
+console.log(currentQuestion)
 
 class Question {
     text;
@@ -76,7 +77,7 @@ new Question("questioasdajshdkajshdlkjashdlkjashdn12?",
 "center;","dropDown"),
 new Question(".container {\n display: &cell% flex-direction: &cell%  justify-content: &cell% align-items: &cell% }",
 ["flex;","column;","center;","flex-end;"],
-["flex;","column;","center;","flex-end;"],"dragAndDrop"),
+["flex;","column;","center;","flex-end;"],"dragAndDrop")
 ];
 // ];
 const countOfQuestions = questions.length;
