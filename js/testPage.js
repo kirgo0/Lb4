@@ -36,7 +36,7 @@ class Question {
     }
 
     result() {
-        if(this.type === "default" || this.type === "dropDown") {
+        if(this.type === "default") {
             if(this.answers[this.correctAnswer] == this.answers[this.selectedAnswer]) {
                 return 1;
             } else return 0;
@@ -56,6 +56,10 @@ class Question {
                 }
             }
             return res;
+        } else {
+            if(this.selectedAnswer === this.correctAnswer) {
+                return 1;
+            } else return 0;
         }
     }
 
@@ -72,7 +76,7 @@ const questions =
 // new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default"),
 // new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
 new Question("question10?",["answer1","answer2","answer3","answer4"],[0,2,3],"checkBox"),
-new Question("questioasdajshdkajshdlkjashdlkjashdn12?",
+new Question("dropdown?",
 ["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhda sdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
 "center;","dropDown"),
 new Question(".container {\n display: &cell% flex-direction: &cell%  justify-content: &cell% align-items: &cell% }",
@@ -502,9 +506,15 @@ function GenerateTestConfirmMenu() {
     var TestResult = 0;
     finishButton.onclick = (()=> {
         questions.forEach(q => {
+            alert(`Q: ${q.text} POINTS: ${q.result()} TOTAL ${TestResult}`)
             TestResult+=q.result();
         });
         localStorage.setItem("last-result",TestResult);
+        fetch('/results', {
+            method: 'POST',
+            body: JSON.stringify({string: "bebra"}),
+            headers: { 'Content-Type': 'application/json' }
+          })
         window.document.location = './resultsPage.html';
     });
     finishButtonBlock.appendChild(finishButton);

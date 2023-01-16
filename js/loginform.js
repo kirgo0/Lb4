@@ -37,6 +37,7 @@ function startTest() {
    localStorage.setItem("user-surname",document.getElementById("surname").value);
    localStorage.setItem("user-group",document.getElementById("group").value);
    localStorage.setItem("count-of-tries",1);
+   localStorage.setItem("currentQuestion",0);
    window.document.location = './testPage.html';
 }
 
