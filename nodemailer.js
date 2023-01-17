@@ -11,9 +11,14 @@ const transporter = nodemailer.createTransport(
         }
     },
     {
-        from: 'Mailer Test <maia49@ethereal.email>',
+        from: 'Mailer Test <mina12@ethereal.email>',
     }
 )
+
+// функція для відправки листа на електронну пошту
+// при відправці на gmail, виникли проблеми, 
+// які я намагався виправити всімома способами, що тільки знайшов, але так нічого і не допомогло
+// функція відправляє литси на всі інші електронні сервіси, окрім gmail :(
 
 const mailer = message => {
     transporter.sendMail(message, (err, info) => {

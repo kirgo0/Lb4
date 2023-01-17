@@ -22,7 +22,7 @@ body {
 
 .question-block {
     width: 75vw;
-    height: 70vh;
+    min-height: 70vh;
     display: flex;
     background-color: #fff;
     padding: 30px;
