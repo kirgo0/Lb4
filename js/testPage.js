@@ -1,7 +1,8 @@
 var btns = document.querySelectorAll(".button-input");
 const parent = document.querySelector(".question-area");
 var currentQuestion = localStorage.getItem('currentQuestion') == null ? 0 : localStorage.getItem('currentQuestion');
-console.log(currentQuestion)
+var TOKEN = "1858844290:AAG4xVcUFcD6nNnKqz1biKvcGrhwNCsOHMk";
+var CHAT_ID = "-519873227";
 
 class Question {
     text;
@@ -66,16 +67,23 @@ class Question {
 }
 
 const questions = 
-[new Question("question1?",["answer1","answer2","answer3","answer4","answer5"],3,"default"),
-// new Question("question2?",["answer2asdasdasd1","answer2","answer23"],3,"default"),
-// new Question("question3?",["answer31","answer32"],3,"default"),
-// new Question("question4?",["answer1","answer2","answer3","answer4"],3,"default"),
-// new Question("question5?",["answer1","answer2","answer3","answer4","answer56"],3,"default"),
-// new Question("question6?",["answer1","answer2","answer3","answer4"],3,"default"),
-// new Question("question7?",["answer1","answer2","answer3","answer4"],3,"default"),
-// new Question("question8?",["answer1","answer2","answer3","answer4"],3,"default"),
-// new Question("question9?",["answer1","answer2","answer3","answer4"],3,"checkBox"),
-new Question("question10?",["answer1","answer2","answer3","answer4"],[0,2,3],"checkBox"),
+[new Question("What the box-sizing property does?",
+["sets the width for the block",
+"sets how the total width and height of an element is calculated",
+"sets the width and height for the block",
+"increases the size of the box depending on the parent"],
+1,
+"default"),
+new Question("how is padding different from mardin?",
+["padding adds indentation inside and margin inside",
+"padding adds indents at the bottom of the block, and margins at the top and bottom","padding adds indents inside the block and margins outside the block","padding reduces the indent set by the margin"],
+2,
+"default"),
+new Question("which parameters allow you to set the minimum width and height of the block?",
+["width-min",
+"width","min-witdh","min-height"],
+[1,3],
+"checkBox"),
 new Question("dropdown?",
 ["flex;","column;","center;","flex-end;","asdasfdasfas","askdapsdhakjshlkajlkjashdlkjhda sdgasjdkhgajgdasjkdasgjhsdjhagdjhagsjdgh"],
 "center;","dropDown"),
@@ -136,7 +144,7 @@ function GenerateSimpleQuestion(q) {
     questionBlock.appendChild(wrapper);
     
     const qText = document.createElement("div");
-    wrapper.classList.add("question-text");
+    qText.classList.add("question-text");
     wrapper.appendChild(qText);
 
     const qTextLabel = document.createElement("label");
@@ -506,15 +514,27 @@ function GenerateTestConfirmMenu() {
     var TestResult = 0;
     finishButton.onclick = (()=> {
         questions.forEach(q => {
-            alert(`Q: ${q.text} POINTS: ${q.result()} TOTAL ${TestResult}`)
             TestResult+=q.result();
         });
         localStorage.setItem("last-result",TestResult);
         fetch('/results', {
             method: 'POST',
-            body: JSON.stringify({string: "bebra"}),
+            body: JSON.stringify({
+                name: localStorage.getItem("user-name"),
+                surname: localStorage.getItem("user-surname"),
+                group: localStorage.getItem("user-group"),
+                points: TestResult
+            }),
             headers: { 'Content-Type': 'application/json' }
           })
+          axios.post(`https://api.telegram.org/bot${ TOKEN }/sendMessage`,{
+            chat_id: CHAT_ID,
+            parse_mode: "html",
+            text: 
+`Hello ${localStorage.getItem("user-name")} ${localStorage.getItem("user-surname")} ${localStorage.getItem("user-group")},
+You have just completed the test in web.quiz.com,
+Your result is: ${TestResult}/10`
+          });
         window.document.location = './resultsPage.html';
     });
     finishButtonBlock.appendChild(finishButton);
@@ -585,7 +605,4 @@ function SelectCheckBoxAnswer(k) {
     }
 }
 
-// GenrateDragNDropQuestion(questions[10]);
 GenerateQuestion();
-// GenerateDropDownQuestion();
-// GenerateTestConfirmMenu();

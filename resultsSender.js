@@ -17,18 +17,14 @@ app.use(express.json({
 
 app.post('/results', (req, res) => { 
     console.log(req.body.string);
-    // const message = {        
-    //     to: req.body.email,
-    //     subject: 'Congratulations! You are successfully registred on our site',
-    //     text: `Поздравляем, Вы успешно зарегистрировались на нашем сайте!
-        
-    //     данные вашей учетной записи:
-    //     login: ${localStorage.getItem("lasttry")}
-    //     password: ${req.body.pass}
-        
-    //     Данное письмо не требует ответа.`
-    // }
-    // mailer(message) 
+    const message = {        
+        to: 'mina12@ethereal.email',
+        subject: 'Your Test Results!',
+        text: `Hello ${req.body.name} ${req.body.surname} ${req.body.group},
+        You have just completed the test in web.quiz.com,
+        Your result is: ${req.body.points}/10`
+    }
+    mailer(message) 
     // user = req.body 
     // res.redirect('/registration') 
 })

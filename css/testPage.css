@@ -50,13 +50,14 @@ body {
 .question-text {
     font-family: 'Roboto Mono', monospace;
     font-size: 2vw;
-    width: 45vw;
+    flex-grow: 1;
     max-width: 70vw;
 }
 
 .question-answers {
     display: flex;
     justify-content: space-between;
+    flex-direction: column;
 }
 
 .button-input {
